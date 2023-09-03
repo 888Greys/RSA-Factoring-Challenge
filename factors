@@ -1,0 +1,50 @@
+#!/bin/usr/python3
+import sys
+
+
+# RSA FACTORING CHALLENGE
+
+# Function to factorize a number 'n' into two smaller integers, p and q.
+def factorize(n):
+    # Start a loop from 2 (smallest possible factor) up to n // 2 + 1.
+    for i in range(2, n // 2 + 1):
+        # Check if n is divisible by 'i' without a remainder.
+        if n % i == 0:
+            # If a factor is found, return 'i' and 'n // i' as factors.
+            return i, n // i
+    # If no factors are found, return None, None to indicate 'n' is prime.
+    return None, None
+
+# Check if the correct number of command-line arguments is provided.
+if len(sys.argv) != 2:
+    print("Usage: factors <file>")
+    sys.exit(1)
+
+# Get the name of the input file from the command-line arguments.
+input_file = sys.argv[1]
+
+try:
+    # Open and read the input file.
+    with open(input_file, 'r') as file:
+        # Iterate through each line in the file.
+        for line in file:
+            # Convert the line content to an integer (assuming it's a natural number > 1).
+            n = int(line.strip())
+            # Find the factors 'p' and 'q' using the factorize function.
+            p, q = factorize(n)
+            if p is not None and q is not None:
+                # If 'p' and 'q' are not None, print the factorization.
+                print(f"{n}={p}*{q}")
+            else:
+                # If 'p' and 'q' are both None, print that 'n' is a prime number.
+                print(f"{n} is a prime number")
+
+except FileNotFoundError:
+    # Handle the case where the input file is not found.
+    print(f"File '{input_file}' not found.")
+    sys.exit(1)
+except ValueError:
+    # Handle the case where the input file contains invalid data.
+    print("Invalid input in the file. Please make sure all lines contain valid natural numbers greater than 1.")
+    sys.exit(1)
+
